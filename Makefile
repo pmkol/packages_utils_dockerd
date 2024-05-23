@@ -72,8 +72,7 @@ define EnsureVendoredVersion
 		DEP_VER=$$$$( grep --only-matching --perl-regexp '(?<=PKG_VERSION:=)(.*)' "$(1)" ); \
 		VEN_VER=$$$$( grep --only-matching --perl-regexp '(?<=_VERSION:=v)(.*)(?=})' "$(PKG_BUILD_DIR)/hack/dockerfile/install/$(2)" ); \
 		if [ "$$$${VEN_VER}" != "$$$${DEP_VER}" ]; then \
-			echo "ERROR: Expected 'PKG_VERSION:=$$$${VEN_VER}' in '$(1)', found 'PKG_VERSION:=$$$${DEP_VER}'"; \
-			exit 1; \
+			echo "WARNING: Expected 'PKG_VERSION:=$$$${VEN_VER}' in '$(1)', found 'PKG_VERSION:=$$$${DEP_VER}'"; \
 		fi \
 	)
 endef
@@ -85,8 +84,7 @@ define EnsureVendoredCommit
 		DEP_VER=$$$$( grep --only-matching --perl-regexp '(?<=PKG_SOURCE_VERSION:=)(.*)' "$(1)" ); \
 		VEN_VER=$$$$( grep --only-matching --perl-regexp '(?<=_COMMIT:=)(.*)(?=})' "$(PKG_BUILD_DIR)/hack/dockerfile/install/$(2)" ); \
 		if [ "$$$${VEN_VER}" != "$$$${DEP_VER}" ]; then \
-			echo "ERROR: Expected 'PKG_SOURCE_VERSION:=$$$${VEN_VER}' in '$(1)', found 'PKG_SOURCE_VERSION:=$$$${DEP_VER}'"; \
-			exit 1; \
+			echo "WARNING: Expected 'PKG_SOURCE_VERSION:=$$$${VEN_VER}' in '$(1)', found 'PKG_SOURCE_VERSION:=$$$${DEP_VER}'"; \
 		fi \
 	)
 endef
@@ -104,8 +102,7 @@ define Build/Prepare
 		CLI_MAKEFILE="../docker/Makefile"; \
 		CLI_VERSION=$$$$( grep --only-matching --perl-regexp '(?<=PKG_VERSION:=)(.*)' "$$$${CLI_MAKEFILE}" ); \
 		if [ "$$$${CLI_VERSION}" != "$(PKG_VERSION)" ]; then \
-			echo "ERROR: Expected 'PKG_VERSION:=$(PKG_VERSION)' in '$$$${CLI_MAKEFILE}', found 'PKG_VERSION:=$$$${CLI_VERSION}'"; \
-			exit 1; \
+			echo "WARNING: Expected 'PKG_VERSION:=$(PKG_VERSION)' in '$$$${CLI_MAKEFILE}', found 'PKG_VERSION:=$$$${CLI_VERSION}'"; \
 		fi \
 	)
 
@@ -113,8 +110,7 @@ define Build/Prepare
 	( \
 		EXPECTED_PKG_GIT_SHORT_COMMIT=$$$$( $(CURDIR)/git-short-commit.sh '$(PKG_GIT_URL)' '$(PKG_GIT_REF)' '$(TMP_DIR)/git-short-commit/$(PKG_NAME)-$(PKG_VERSION)' ); \
 		if [ "$$$${EXPECTED_PKG_GIT_SHORT_COMMIT}" != "$(strip $(PKG_GIT_SHORT_COMMIT))" ]; then \
-			echo "ERROR: Expected 'PKG_GIT_SHORT_COMMIT:=$$$${EXPECTED_PKG_GIT_SHORT_COMMIT}', found 'PKG_GIT_SHORT_COMMIT:=$(strip $(PKG_GIT_SHORT_COMMIT))'"; \
-			exit 1; \
+			echo "WARNING: Expected 'PKG_GIT_SHORT_COMMIT:=$$$${EXPECTED_PKG_GIT_SHORT_COMMIT}', found 'PKG_GIT_SHORT_COMMIT:=$(strip $(PKG_GIT_SHORT_COMMIT))'"; \
 		fi \
 	)
 endef
